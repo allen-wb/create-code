@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Table Manager</title>
+    <script th:src="@{~/js/common/jquery-3.1.1.js}"></script>
+    <script type="text/javascript">
+        var tr;
+        $(function () {
+            tr = $("table tbody").children("tr")[0];
+        });
+
+        //添加一行记录
+        function addTr(obj) {
+            //添加元素之后绑定时间无效，需要为新添加的元素再次绑定
+            var _tr = "<tr>" + tr.innerHTML + "</tr>"
+            $("table tbody").append(_tr);
+        }
+
+        //删除一行记录
+        function removeTr(obj) {
+            var trNum = $('.table tbody tr').length;
+            if (1 != trNum) {
+                $(obj).parents('tr').remove();
+            }
+        }
+    </script>
+</head>
+<body>
+<form action="<%=basePath%>/code/createCode.do"
+      class="container form-horizontal" method="post">
+    <section>
+        <div class="titleInfo">
+            <span> 基本信息 </span>
+        </div>
+        <div class="form-group ">
+            <label>表名</label>
+            <input type="text" id="tableName" name="tableName" value="" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label>包名</label>
+            <input type="text" id="packageName" value="" name="packageName" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label>对象</label>
+            <input type="text" id="objectName" value="" name="objectName" class="form-control"/>
+        </div>
+        <div class="form-group ">
+            <label>说明</label>
+            <input type="text" name="remark" id="remark" value="" class="form-control"/>
+        </div>
+    </section>
+    <section>
+        <div class="titleInfo">
+            <span> 字段列表 </span>
+        </div>
+        <table class="table" model="genFiledsEntities">
+            <thead>
+            <tr>
+                <th class="colTh">列名</th>
+                <th class="colTh">说明</th>
+                <th class="colTh">物理类型</th>
+                <th class="colTh">默认值</th>
+                <th class="colTh">java类型</th>
+                <th class="colTh">java属性名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input type="text" class="form-control" name="columnName"></td>
+                <td><input type="text" class="form-control" name="remark"></td>
+                <td>
+                    <select name="columnType">
+                        <option value="varchar(64)">varchar</option>
+                        <option value="int(10)">int(10)</option>
+                        <option value="bigint(10)">bigint(10)</option>
+                        <option value="tinyint(1)">tinyint(1)</option>
+                        <option th:value="datetime">datetime</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control" name="columnDefault"></td>
+                <td>
+                    <select name="javaType">
+                        <option th:value="String">String</option>
+                        <option th:value="int">int</option>
+                        <option th:value="Date">Date</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control" name="javaProprety"></td>
+                <td>
+                    <button type="button" class="btn btn-default" onclick="addTr(this)">添加</button>
+                    <button type="button" class="btn btn-default" onclick="removeTr(this)">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <button type="button" class="btn btn-default" id="save"
+            onclick="saveGen()">保存
+    </button>
+    <button type="button" class="btn btn-default" id="goback">返回</button>
+</form>
+</body>
+<script type="text/javascript">
+    function saveGen() {
+
+        var data = [];
+        var tbody = $("table tbody");
+        var objName = $("table").attr("model");
+        var trs = tbody.children("tr");
+        for (var i = 0; i < trs.length; i++) {
+            var tr = trs.eq(i);
+            var tds = tr.children("td");
+            var genFiledsEntity = {};
+            for (var j = 0; j < tds.length; j++) {
+                var td = tds.eq(j);
+                var name = td.children().eq(0).attr('name');
+                if (typeof(name) != "undefined") {
+                    // if ("checkbox" == td.children().attr("type").toLowerCase()) {
+                    //     if ($("[name='" + name + "']")[0].checked) {
+                    //         eval("genFiledsEntity." + name + "='1'");
+                    //     } else {
+                    //         eval("genFiledsEntity." + name + "='0'");
+                    //     }
+                    // } else {
+                    // }
+                    eval("genFiledsEntity." + name + "='" + td.children().eq(0).val() + "'");
+                }
+            }
+            data.push(genFiledsEntity);
+        }
+        var tableName = $("#tableName").val();
+        var objName = $("#objectName").val();
+        var remark = $("#remark").val();
+        var packageName = $("#packageName").val();
+
+        if ('' == $.trim(tableName)) {
+            alert('表名称无效');
+            return;
+        }
+
+        if ('' == $.trim(packageName)) {
+            alert('包名无效');
+            return;
+        }
+
+        if ('' == $.trim(objName)) {
+            alert('对象名称无效');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "createCode",
+            data: JSON.stringify({
+                tableName: tableName,
+                objectName: objName,
+                packageName: packageName,
+                genFiledsEntities: data
+            }),
+            success: function (result) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "downloadZip",
+                    data: JSON.stringify({packageName: packageName}),
+                    success: function (result) {
+
+                    }
+                });
+                //location.href = 'code/' + packageName + '.zip';
+            }
+        });
+
+
+
+    }
+</script>
+</html>

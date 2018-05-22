@@ -1,0 +1,30 @@
+table[name=requireAttr]>tbody>tr>td{
+	vertical-align: middle;
+}
+table .form-control{
+	border-radius: 0;
+}
+table .form-control:focus{
+	border-color: #18a689;
+}
+.tabs-container{
+	margin-top: 20px;
+}
+.nav-tabs > li > a {
+	color: #A7B1C2;
+}
+#contentTable1 tr{
+	cursor: move;
+}
+#contentTable1.table-bordered>tbody>tr>td,#contentTable2.table-bordered>tbody>tr>td,#contentTable4.table-bordered>tbody>tr>td{
+	text-align: center;
+	vertical-align: middle;
+}
+#contentTable3.table-bordered>thead>tr>th {
+	line-height: 32px;
+}
+.tab-content{
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}

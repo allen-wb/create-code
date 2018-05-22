@@ -1,0 +1,107 @@
+/*初始化样式*/
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+body, button, input, select, textarea { font:12px/1.5tahoma, arial, \5b8b\4f53; }
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+address, cite, dfn, em, var { font-style:normal; }
+code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+small{ font-size:12px; }
+ul, ol { list-style:none; }
+a { text-decoration:none; }
+a:hover { text-decoration:none; }
+sup { vertical-align:text-top; }
+sub{ vertical-align:text-bottom; }
+legend { color:#000; }
+fieldset, img { border:0; }
+button, input, select, textarea { font-size:100%; }
+table { border-collapse:collapse; border-spacing:0; } 
+
+/*公共样式*/
+.clearfix, .cf{zoom:1}
+.clearfix:after, .cf:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+
+body {
+	font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	color: #676a6c;
+}
+.margin50{
+	margin: 50px;
+}
+.width40{
+	width:40px;
+}
+.width60{
+	width:60px;
+}
+.width-15{
+	width: 15%;
+}
+.width-30 {
+	width: 30%;
+}
+.width-35 {
+	width: 35%;
+}
+.width-65 {
+	width: 65%;
+}
+.indent20{
+	text-indent: 20px;
+}
+.indent40{
+	text-indent: 40px;
+}
+.indent60{
+	text-indent: 60px;
+}
+.indent80{
+	text-indent: 80px;
+}
+.indent100{
+	text-indent: 100px;
+}
+.right10{
+	right:10px;
+}
+.right84{
+	right:84px;
+}
+.right178{
+	right:178px;
+}
+.red{
+	color: red;
+}
+.bold{
+	font-weight: bold;
+}
+/*表格样式*/
+.table thead{
+	background-color: #F5F5F5;
+}
+.table-bordered>thead>tr>th {
+	border-bottom-width: 1px;
+}
+.table tbody tr td:first-child,.table thead tr th:first-child{
+	text-align: center;
+}
+/*表格样式*/
+/*checkbox样式*/
+.checkboxImg{
+	width: 22px;
+	height: 22px;
+	background: url(../img/green.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}
+.checkboxImg:hover{
+	background-position: -24px 0;
+}
+.checkboxImg.checked {
+	background-position: -48px 0;
+}
+/*checkbox样式*/
