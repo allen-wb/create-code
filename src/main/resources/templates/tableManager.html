@@ -161,16 +161,11 @@
                 genFiledsEntities: data
             }),
             success: function (result) {
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json",
-                    url: "downloadZip",
-                    data: JSON.stringify({packageName: packageName}),
-                    success: function (result) {
-
-                    }
-                });
-                //location.href = 'code/' + packageName + '.zip';
+                var bathPath = result;
+                window.location.href = bathPath + 'downloadZip?packageName=' + packageName;
+            },
+            error: function () {
+                alert("操作失败");
             }
         });
 

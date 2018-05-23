@@ -3,7 +3,6 @@ package com.example.createcode.controller;
 import com.example.createcode.common.utils.*;
 import com.example.createcode.entity.GenEntity;
 import com.example.createcode.entity.GenFiledsEntity;
-import com.example.createcode.entity.PathEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -34,7 +34,8 @@ public class CodeController {
      * 生成代码
      */
     @RequestMapping(value = "createCode", method = RequestMethod.POST)
-    public void createCode(HttpServletResponse response, @RequestBody GenEntity entity) throws Exception{
+    @ResponseBody
+    public String createCode(HttpServletRequest request, HttpServletResponse response, @RequestBody GenEntity entity) throws Exception{
         // 表名称
         String tableName = entity.getTableName();
         // 对象名称
@@ -130,20 +131,25 @@ public class CodeController {
         /* 生成的全部代码压缩成zip文件 */
         FileZip.zip(PathUtil.getClasspath() + "code/" + packageName,
                 PathUtil.getClasspath() + "code/" + packageName + "/" + packageName + ".zip");
+
+        //服务端路径
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +  "/";
+
+        return basePath;
     }
 
 
     /**
      * 下载代码压缩包
-     * @param pathEntity
+     * @param packageName
      * @param response
      * @return
      */
-    @RequestMapping(value = "downloadZip", method = RequestMethod.POST)
+    @RequestMapping(value = "downloadZip", method = RequestMethod.GET)
     @ResponseBody
-    public void  downloadZip(@RequestBody PathEntity pathEntity, HttpServletResponse response) throws Exception{
-        if(StringUtils.isNoneBlank(pathEntity.getPackageName())){
-            File file = new File(PathUtil.getClasspath() + "code/" + pathEntity.getPackageName() + "/" + pathEntity.getPackageName() + ".zip");
+    public void  downloadZip(String packageName, HttpServletResponse response) throws Exception{
+        if(StringUtils.isNoneBlank(packageName)){
+            File file = new File(PathUtil.getClasspath() + "code/" + packageName + "/" + packageName + ".zip");
             String filename = file.getName();
             FileDownload.fileDownload(response, file.getPath(), filename);
         }
